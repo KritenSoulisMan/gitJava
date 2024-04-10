@@ -1,17 +1,37 @@
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
+import java.util.Date;
+
+import model.Task;
+import model.TaskManager;
+
 public class Main {
     public static void main(String[] args) {
-        // Press Alt+Enter with your caret at the highlighted text to see how
-        // IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        // Создание менеджера задач
+        TaskManager taskManager = new TaskManager();
 
-        // Press Shift+F10 or click the green arrow button in the gutter to run the code.
-        for (int i = 1; i <= 5; i++) {
+        // Создание нескольких задач
+        Task task1 = new Task("Закончить проект", "Завершить работу над проектом к концу недели", new Date(), new Date(2024, 4, 15));
+        Task task2 = new Task("Подготовить отчет", "Написать отчет о выполненной работе", new Date(), new Date(2024, 4, 20));
 
-            // Press Shift+F9 to start debugging your code. We have set one breakpoint
-            // for you, but you can always add more by pressing Ctrl+F8.
-            System.out.println("i = " + i);
+        // Добавление задач в менеджер задач
+        taskManager.addTask(task1);
+        taskManager.addTask(task2);
+
+        // Вывод списка задач
+        System.out.println("Список всех задач:");
+        for (int i = 0; i < taskManager.getTaskCount(); i++) {
+            System.out.println(taskManager.getTask(i));
+        }
+
+        // Пометить первую задачу как завершенную
+        task1.markAsCompleted();
+
+        // Обновление второй задачи
+        task2.setDescription("Написать отчет о выполненной работе и отправить его менеджеру");
+
+        // Вывод обновленного списка задач
+        System.out.println("\nОбновленный список всех задач:");
+        for (int i = 0; i < taskManager.getTaskCount(); i++) {
+            System.out.println(taskManager.getTask(i));
         }
     }
 }
