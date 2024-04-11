@@ -2,56 +2,76 @@ package model;
 
 import java.util.*;
 
-public class TaskManager {
+public class TaskManager
+{
     private List<Task> tasks;
 
-    public TaskManager() {
+    public TaskManager()
+    {
         this.tasks = new ArrayList<>();
     }
 
-    public void addTask(Task task) {
+    public void addTask(Task task)
+    {
         tasks.add(task);
     }
 
-    public void removeTask(int index) {
-        if (index >= 0 && index < tasks.size()) {
+    public void removeTask(int index)
+    {
+        if (index >= 0 && index < tasks.size())
+        {
             tasks.remove(index);
-        } else {
+        }
+        else
+        {
             System.out.println("Неверный индекс задачи");
         }
     }
 
-    public List<Task> getAllTasks() {
+    public List<Task> getAllTasks()
+    {
         return tasks;
     }
 
-    public Task getTask(int id) {
-        if (id >= 0 && id < tasks.size()) {
+    public Task getTask(int id)
+    {
+        if (id >= 0 && id < tasks.size())
+        {
             return tasks.get(id);
-        } else {
+        }
+        else
+        {
             System.out.println("Неверный индекс задачи");
             return null;
         }
     }
 
-    public Task getTask(String key) {
-        for (Task task : tasks) {
-            if (task.getKey().equals(key)) {
+    public Task getTask(String key)
+    {
+        for (Task task : tasks)
+        {
+            if (task.getKey().equals(key))
+            {
                 return task;
             }
         }
         return null;
     }
 
-    public void updateTask(int index, Task updatedTask) {
-        if (index >= 0 && index < tasks.size()) {
+    public void updateTask(int index, Task updatedTask)
+    {
+        if (index >= 0 && index < tasks.size())
+        {
             tasks.set(index, updatedTask);
-        } else {
+        }
+        else
+        {
             System.out.println("Неверный индекс задачи");
         }
     }
 
-    public int getTaskCount() {
+    public int getTaskCount()
+    {
         return tasks.size();
     }
 
@@ -66,7 +86,7 @@ public class TaskManager {
             {
                 String value = filters.get(key);
                 switch (key)
-                {
+                { //todo задать в Task классе
                     case "summary":
                         if (!task.getSummary().contains(value))
                         {
@@ -132,19 +152,4 @@ public class TaskManager {
     {
         tasks.sort(Comparator.comparing(Task::isCompleted));
     }
-
-    // Метод для вывода всех задач
-    public void printTasks()
-    {
-        //todo Переделать на сокращённую форму цикла for.
-        for (int i = 0; i < tasks.size(); i++)
-        {
-            System.out.println("Task " + i + ": " + tasks.get(i).getSummary());
-            //todo Переопределить в class TASK метод ToString и использовать его для стокового представления.
-        }
-    }
 }
-
-
-
-

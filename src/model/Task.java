@@ -4,9 +4,6 @@ import java.util.Date;
 
 public class Task
 {
-    private String creator;
-    private String assignee;
-    private String supervisor;
     private String summary; // Переменная для хранения краткого описания задачи
     private String description; // Переменная для хранения подробного описания задачи
     private Date createDate; // Переменная для хранения даты создания задачи
@@ -16,7 +13,7 @@ public class Task
     private String Key;
 
     // Конструктор класса, принимающий переменные
-    public Task(String summary, String description, Date createDate, Date dueDate, String creator, String assignee, String supervisor)
+    public Task(String summary, String description, Date createDate, Date dueDate)
     {
         // Инициализация полей класса значениями, переданными через параметры конструктора
         this.summary = summary;
@@ -24,31 +21,6 @@ public class Task
         this.createDate = createDate;
         this.dueDate = dueDate;
         this.completed = false; // По умолчанию задача не завершена
-        this.creator = creator;
-        this.assignee = assignee;
-        this.supervisor = supervisor;
-
-    }
-
-
-    public Task(String закончитьПроект, String description, Date createDate, Date dueDate)
-    {
-        //
-    }
-
-    public String getCreator()
-    {
-        return creator;
-    }
-
-    public String getAssignee()
-    {
-        return assignee;
-    }
-
-    public String getSupervisor()
-    {
-        return supervisor;
     }
 
     //
