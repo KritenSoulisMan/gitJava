@@ -12,6 +12,7 @@ public class Task
     private Date createDate; // Переменная для хранения даты создания задачи
     private Date dueDate; // Переменная для хранения даты завершения задачи
     private boolean completed; // Переменная для отслеживания статуса завершения задачи
+    {this.completed = false;} // По умолчанию задача не завершена
     private int ID; // id из БД (нужен геттор)
     private String Key;
 
@@ -23,17 +24,10 @@ public class Task
         this.description = description;
         this.createDate = createDate;
         this.dueDate = dueDate;
-        this.completed = false; // По умолчанию задача не завершена
         this.creator = creator;
         this.assignee = assignee;
         this.supervisor = supervisor;
 
-    }
-
-
-    public Task(String закончитьПроект, String description, Date createDate, Date dueDate)
-    {
-        //
     }
 
     public String getCreator()

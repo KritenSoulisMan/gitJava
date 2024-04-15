@@ -5,7 +5,7 @@ import java.util.*;
 public class TaskManager {
     private List<Task> tasks;
 
-    public TaskManager() {
+    public TaskManager() { 
         this.tasks = new ArrayList<>();
     }
 
@@ -136,13 +136,14 @@ public class TaskManager {
     // Метод для вывода всех задач
     public void printTasks()
     {
-        //todo Переделать на сокращённую форму цикла for.
-        for (int i = 0; i < tasks.size(); i++)
+        // Цикл for-each
+        for (Task task : tasks)
         {
-            System.out.println("Task " + i + ": " + tasks.get(i).getSummary());
-            //todo Переопределить в class TASK метод ToString и использовать его для стокового представления.
+            // Метод toString для строкового представления задачи
+            System.out.println(task);
         }
     }
+
 }
 
 
