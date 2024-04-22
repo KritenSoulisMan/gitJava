@@ -7,7 +7,6 @@ public class Filter {
     private String stringFilter;
     private Date dateFilter;
     private FilterType filterType;
-    //todo добавить фильтры по id, companyID, deportmentID
     private HashMap<String, String> stringFilters = new HashMap<>();
     private HashMap<String, Date> dateFilters = new HashMap<>();
 

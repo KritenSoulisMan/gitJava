@@ -2,10 +2,12 @@ package model;
 
 import java.util.*;
 
-public class TaskManager {
+public class TaskManager
+{
     private List<Task> tasks;
 
-    public TaskManager() { 
+    public TaskManager()
+    {
         this.tasks = new ArrayList<>();
     }
 
@@ -13,8 +15,10 @@ public class TaskManager {
         tasks.add(task);
     }
 
-    public void removeTask(int index) {
-        if (index >= 0 && index < tasks.size()) {
+    public void removeTask(int index)
+    {
+        if (index >= 0 && index < tasks.size())
+        {
             tasks.remove(index);
         } else {
             System.out.println("Неверный индекс задачи");
@@ -25,28 +29,39 @@ public class TaskManager {
         return tasks;
     }
 
-    public Task getTask(int id) {
-        if (id >= 0 && id < tasks.size()) {
+    public Task getTask(int id)
+    {
+        if (id >= 0 && id < tasks.size())
+        {
             return tasks.get(id);
-        } else {
+        }
+        else
+        {
             System.out.println("Неверный индекс задачи");
             return null;
         }
     }
 
-    public Task getTask(String key) {
-        for (Task task : tasks) {
-            if (task.getKey().equals(key)) {
+    public Task getTask(String key)
+    {
+        for (Task task : tasks)
+        {
+            if (task.getKey().equals(key))
+            {
                 return task;
             }
         }
         return null;
     }
 
-    public void updateTask(int index, Task updatedTask) {
-        if (index >= 0 && index < tasks.size()) {
+    public void updateTask(int index, Task updatedTask)
+    {
+        if (index >= 0 && index < tasks.size())
+        {
             tasks.set(index, updatedTask);
-        } else {
+        }
+        else
+        {
             System.out.println("Неверный индекс задачи");
         }
     }
@@ -144,8 +159,15 @@ public class TaskManager {
         }
     }
 
+    // Метод для описания задачи по ее индексу
+    public void describeTask(int index) {
+        if (index >= 0 && index < tasks.size()) {
+            Task task = tasks.get(index);
+            System.out.println("Описание задачи:");
+            System.out.println("Краткое описание: " + task.getSummary());
+            System.out.println("Подробное описание: " + task.getDescription());
+        } else {
+            System.out.println("Неверный индекс задачи");
+        }
+    }
 }
-
-
-
-

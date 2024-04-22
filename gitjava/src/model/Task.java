@@ -1,5 +1,8 @@
 package model;
 
+import model.userSettings.User;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Task
@@ -121,5 +124,33 @@ public class Task
     public void setCompleted(boolean completed)
     {
         this.completed = completed;
+    }
+
+    public String getTitle()
+    {
+        return summary;
+    }
+    public void setAssignee(User user) { this.assignee = user.getUsername(); }
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Название: ").append(summary).append("\n");
+        sb.append("Описание: ").append(description).append("\n");
+        sb.append("Дата создания: ").append(formatDate(createDate)).append("\n");
+        sb.append("Дата завершения: ").append(formatDate(dueDate)).append("\n");
+        sb.append("Создатель: ").append(creator).append("\n");
+        sb.append("Назначенный: ").append(assignee).append("\n");
+        sb.append("Надзиратель: ").append(supervisor).append("\n");
+        sb.append("Статус: ").append(completed ? "Завершено" : "Не завершено").append("\n");
+        return sb.toString();
+    }
+
+    private String formatDate(Date date) {
+        if (date != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+            return sdf.format(date);
+        } else {
+            return "Не задана";
+        }
     }
 }
