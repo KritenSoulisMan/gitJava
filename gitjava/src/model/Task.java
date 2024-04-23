@@ -15,14 +15,17 @@ public class Task
     private Date createDate; // Переменная для хранения даты создания задачи
     private Date dueDate; // Переменная для хранения даты завершения задачи
     private boolean completed; // Переменная для отслеживания статуса завершения задачи
-    {this.completed = false;} // По умолчанию задача не завершена
-    private int ID; // id из БД (нужен геттор)
-    private String Key;
+    {
+        this.completed = false; // По умолчанию задача не завершена
+    }
+    private String key; // Ключ задачи
 
-    // Конструктор класса, принимающий переменные
+    private static int currentId = 0; // Статический счетчик для уникального id
+    private int id; // Уникальный идентификатор задачи
+
     public Task(String summary, String description, Date createDate, Date dueDate, String creator, String assignee, String supervisor)
     {
-        // Инициализация полей класса значениями, переданными через параметры конструктора
+        this.id = ++currentId; // Установка уникального id при создании задачи
         this.summary = summary;
         this.description = description;
         this.createDate = createDate;
@@ -30,7 +33,6 @@ public class Task
         this.creator = creator;
         this.assignee = assignee;
         this.supervisor = supervisor;
-
     }
 
     public String getCreator()
@@ -49,15 +51,18 @@ public class Task
     }
 
     //
-    public int getID()
+    public int getId()
     {
-        return ID;
+        return id;
     }
 
     //
     public String getKey()
     {
-        return Key;
+        return key;
+    }
+    public void setKey(String key) {
+        this.key = key;
     }
 
     // Метод для пометки задачи как завершенной

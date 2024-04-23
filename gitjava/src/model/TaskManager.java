@@ -11,42 +11,31 @@ public class TaskManager
         this.tasks = new ArrayList<>();
     }
 
-    public void addTask(Task task) {
-        tasks.add(task);
-    }
-
-    public void removeTask(int index)
+    public boolean addTask(Task task)
     {
-        if (index >= 0 && index < tasks.size())
-        {
-            tasks.remove(index);
-        } else {
-            System.out.println("Неверный индекс задачи");
-        }
+        return tasks.add(task);
     }
 
-    public List<Task> getAllTasks() {
-        return tasks;
-    }
-
-    public Task getTask(int id)
+    public boolean removeTaskById(int id)
     {
-        if (id >= 0 && id < tasks.size())
+        Iterator<Task> iterator = tasks.iterator();
+        while (iterator.hasNext())
         {
-            return tasks.get(id);
+            Task task = iterator.next();
+            if (task.getId() == id)
+            {
+                iterator.remove();
+                return true;
+            }
         }
-        else
-        {
-            System.out.println("Неверный индекс задачи");
-            return null;
-        }
+        return false;
     }
 
-    public Task getTask(String key)
+    public Task getTaskById(int id)
     {
         for (Task task : tasks)
         {
-            if (task.getKey().equals(key))
+            if (task.getId() == id)
             {
                 return task;
             }
@@ -54,72 +43,43 @@ public class TaskManager
         return null;
     }
 
-    public void updateTask(int index, Task updatedTask)
+    public void updateTask(int id, Task updatedTask)
     {
-        if (index >= 0 && index < tasks.size())
+        for (int i = 0; i < tasks.size(); i++)
         {
-            tasks.set(index, updatedTask);
+            if (tasks.get(i).getId() == id)
+            {
+                tasks.set(i, updatedTask);
+                return;
+            }
         }
-        else
-        {
-            System.out.println("Неверный индекс задачи");
-        }
+        System.out.println("Задача с ID " + id + " не найдена.");
     }
 
-    public int getTaskCount() {
+    public List<Task> getAllTasks()
+    {
+        return new ArrayList<>(tasks);
+    }
+
+    public int getTaskCount()
+    {
         return tasks.size();
     }
 
-    // Метод для фильтрации задач по всем полям с использованием HashMap
     public List<Task> filterTasks(HashMap<String, String> filters)
     {
         List<Task> filteredTasks = new ArrayList<>();
         for (Task task : tasks)
         {
             boolean match = true;
-            for (String key : filters.keySet())
+            for (Map.Entry<String, String> entry : filters.entrySet())
             {
-                String value = filters.get(key);
-                switch (key)
+                String key = entry.getKey();
+                String value = entry.getValue();
+                if (!matchesFilter(task, key, value))
                 {
-                    case "summary":
-                        if (!task.getSummary().contains(value))
-                        {
-                            match = false;
-                        }
-                        break;
-                    case "description":
-                        if (!task.getDescription().contains(value))
-                        {
-                            match = false;
-                        }
-                        break;
-                    case "creator":
-                        if (!task.getCreator().equals(value))
-                        {
-                            match = false;
-                        }
-                        break;
-                    case "assignee":
-                        if (!task.getAssignee().equals(value))
-                        {
-                            match = false;
-                        }
-                        break;
-                    case "supervisor":
-                        if (!task.getSupervisor().equals(value))
-                        {
-                            match = false;
-                        }
-                        break;
-                    case "user":
-                        if (!(task.getCreator().equals(value) || task.getAssignee().equals(value) || task.getSupervisor().equals(value)))
-                        {
-                            match = false;
-                        }
-                        break;
-                    default:
-                        break;
+                    match = false;
+                    break;
                 }
             }
             if (match)
@@ -130,44 +90,67 @@ public class TaskManager
         return filteredTasks;
     }
 
-    // Метод для сортировки задач по дате создания
+    private boolean matchesFilter(Task task, String key, String value)
+    {
+        switch (key)
+        {
+            case "summary":
+                return task.getSummary().contains(value);
+            case "description":
+                return task.getDescription().contains(value);
+            case "creator":
+                return task.getCreator().equals(value);
+            case "assignee":
+                return task.getAssignee().equals(value);
+            case "supervisor":
+                return task.getSupervisor().equals(value);
+            case "user":
+                return task.getCreator().equals(value) || task.getAssignee().equals(value) || task.getSupervisor().equals(value);
+            default:
+                return false;
+        }
+    }
+
+    public void sortTasksById()
+    {
+        tasks.sort(Comparator.comparingInt(Task::getId));
+    }
+
     public void sortTasksByCreateDate()
     {
         tasks.sort(Comparator.comparing(Task::getCreateDate));
     }
 
-    // Метод для сортировки задач по дате завершения
     public void sortTasksByDueDate()
     {
         tasks.sort(Comparator.comparing(Task::getDueDate));
     }
 
-    // Метод для сортировки задач по статусу завершения
     public void sortTasksByCompletion()
     {
         tasks.sort(Comparator.comparing(Task::isCompleted));
     }
 
-    // Метод для вывода всех задач
     public void printTasks()
     {
-        // Цикл for-each
         for (Task task : tasks)
         {
-            // Метод toString для строкового представления задачи
             System.out.println(task);
         }
     }
 
-    // Метод для описания задачи по ее индексу
-    public void describeTask(int index) {
-        if (index >= 0 && index < tasks.size()) {
-            Task task = tasks.get(index);
+    public void describeTaskById(int id)
+    {
+        Task task = getTaskById(id);
+        if (task != null)
+        {
             System.out.println("Описание задачи:");
             System.out.println("Краткое описание: " + task.getSummary());
             System.out.println("Подробное описание: " + task.getDescription());
-        } else {
-            System.out.println("Неверный индекс задачи");
+        }
+        else
+        {
+            System.out.println("Задача с ID " + id + " не найдена.");
         }
     }
 }

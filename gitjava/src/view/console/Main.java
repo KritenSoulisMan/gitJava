@@ -1,17 +1,14 @@
 package view.console;
 
-import model.SingleTon;
 import model.TaskManager;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main
 {
     public static void main(String[] args)
     {
-        // Получение и вызов экземпляра SingleTon.
-        SingleTon singleTonInstance = SingleTon.getInstance();
-        singleTonInstance.exampleMethod();
-
         TaskManager taskManager = new TaskManager();
         Scanner scanner = new Scanner(System.in);
 
@@ -21,12 +18,25 @@ public class Main
         while (running)
         {
             controller.showAction();
-            int choice = scanner.nextInt();
-            scanner.nextLine();
 
-            controller.proccessAction(choice);
+            int actionNumber = scanner.nextInt();
+            scanner.nextLine(); // Сбор информации перед действием (например, если требуется строковый ввод после целочисленного)
 
-            running = controller.isRunning();
-        }  scanner.close();
+            Controller.Action action = controller.intToAction(actionNumber);
+
+            // Подготовка параметров
+            Map<String, Object> params = new HashMap<>();
+            if (action == Controller.Action.REMOVE_TASK) {
+                System.out.println("Введите индекс задачи для удаления:");
+                int index = scanner.nextInt();
+                params.put("index", index);
+            }
+
+            controller.processAction(action, params); // Передача параметров
+
+            running = controller.isRunning(); // Проверка, завершена ли программа
+        }
+
+        scanner.close();
     }
 }
