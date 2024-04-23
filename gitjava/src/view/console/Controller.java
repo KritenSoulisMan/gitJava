@@ -4,29 +4,27 @@ import model.Task;
 import model.TaskManager;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 public class Controller {
     private TaskManager taskManager;
-    private Scanner scanner;
+    private IOInterface io;
     public static boolean running = true;
 
-    public Controller(TaskManager taskManager, Scanner scanner) {
+    public Controller(TaskManager taskManager, IOInterface io) {
         this.taskManager = taskManager;
-        this.scanner = scanner;
+        this.io = io;
     }
 
     public void showAction() {
-        System.out.println("----------------------");
-        System.out.println("Выберите действие:");
-        System.out.println("");
-        System.out.println("1. Добавить задачу");
-        System.out.println("2. Удалить задачу по ID");
-        System.out.println("3. Описание задачи по ID");
-        System.out.println("4. Вывести все задачи");
-        System.out.println("5. Выход");
-        System.out.println("----------------------");
-        System.out.print("Введите номер действия: ");
+        io.print("----------------------");
+        io.print("Выберите действие:");
+        io.print("1. Добавить задачу");
+        io.print("2. Удалить задачу по ID");
+        io.print("3. Описание задачи по ID");
+        io.print("4. Вывести все задачи");
+        io.print("5. Выход");
+        io.print("----------------------");
+        io.print("Введите номер действия: ");
     }
 
     public enum Action {
@@ -35,61 +33,6 @@ public class Controller {
         DESCRIBE_TASK,
         PRINT_ALL_TASKS,
         EXIT
-    }
-
-    public void processAction(Action action, Map<String, Object> params) {
-        switch (action) {
-            case ADD_TASK:
-                addTask();
-                break;
-            case REMOVE_TASK:
-                if (params != null && params.containsKey("id")) {
-                    int taskId = (int) params.get("id");
-                    if (taskManager.removeTaskById(taskId)) {
-                        System.out.println("Задача удалена.");
-                    } else {
-                        System.out.println("Не удалось удалить задачу с ID: " + taskId);
-                    }
-                } else {
-                    System.out.println("ID задачи не указан.");
-                }
-                break;
-            case DESCRIBE_TASK:
-                describeTaskById();
-                break;
-            case PRINT_ALL_TASKS:
-                taskManager.printTasks();
-                break;
-            case EXIT:
-                running = false;
-                System.out.println("Программа завершена.");
-                break;
-            default:
-                System.out.println("Неверный выбор.");
-        }
-    }
-
-    public void editTask() {
-        System.out.println("Введите ID задачи для редактирования:");
-        int taskId = scanner.nextInt();
-        scanner.nextLine(); // Считываем конец строки после ввода числа
-
-        Task existingTask = taskManager.getTaskById(taskId);
-        if (existingTask != null) {
-            System.out.println("Введите новое краткое описание:");
-            String newSummary = scanner.nextLine();
-
-            System.out.println("Введите новое подробное описание:");
-            String newDescription = scanner.nextLine();
-
-            existingTask.setSummary(newSummary);
-            existingTask.setDescription(newDescription);
-
-            taskManager.updateTask(taskId, existingTask);
-            System.out.println("Задача успешно обновлена.");
-        } else {
-            System.out.println("Задача с ID " + taskId + " не найдена.");
-        }
     }
 
     public Action intToAction(int action) {
@@ -109,27 +52,80 @@ public class Controller {
         }
     }
 
+    public void processAction(Action action, Map<String, Object> params) {
+        switch (action) {
+            case ADD_TASK:
+                addTask();
+                break;
+            case REMOVE_TASK:
+                if (params != null && params.containsKey("id")) {
+                    int taskId = (int) params.get("id");
+                    if (taskManager.removeTaskById(taskId)) {
+                        io.print("Задача удалена.");
+                    } else {
+                        io.print("Не удалось удалить задачу с ID: " + taskId);
+                    }
+                } else {
+                    io.print("ID задачи не указан.");
+                }
+                break;
+            case DESCRIBE_TASK:
+                describeTaskById();
+                break;
+            case PRINT_ALL_TASKS:
+                taskManager.printTasks();
+                break;
+            case EXIT:
+                running = false;
+                io.print("Программа завершена.");
+                break;
+            default:
+                io.print("Неверный выбор.");
+        }
+    }
+
     private void addTask() {
-        System.out.println("Введите краткое описание задачи:");
-        String summary = scanner.nextLine();
-        System.out.println("Введите подробное описание задачи:");
-        String description = scanner.nextLine();
+        io.print("Введите краткое описание задачи:");
+        String summary = io.readLine();
+        io.print("Введите подробное описание задачи:");
+        String description = io.readLine();
         Task task = new Task(summary, description, null, null, null, null, null);
         taskManager.addTask(task);
-        System.out.println("Задача успешно добавлена.");
+        io.print("Задача успешно добавлена.");
     }
 
     private void describeTaskById() {
-        System.out.println("Введите ID задачи для описания:");
-        int taskId = scanner.nextInt();
-        scanner.nextLine(); // Очистка сканнера
+        io.print("Введите ID задачи для описания:");
+        int taskId = io.readInt();
         Task task = taskManager.getTaskById(taskId);
         if (task != null) {
-            System.out.println("Описание задачи:");
-            System.out.println("Краткое описание: " + task.getSummary());
-            System.out.println("Подробное описание: " + task.getDescription());
+            io.print("Описание задачи:");
+            io.print("Краткое описание: " + task.getSummary());
+            io.print("Подробное описание: " + task.getDescription());
         } else {
-            System.out.println("Задача с ID " + taskId + " не найдена.");
+            io.print("Задача с ID " + taskId + "не найдена.");
+        }
+    }
+
+    public void editTask() {
+        io.print("Введите ID задачи для редактирования:");
+        int taskId = io.readInt();
+
+        Task existingTask = taskManager.getTaskById(taskId);
+        if (existingTask != null) {
+            io.print("Введите новое краткое описание:");
+            String newSummary = io.readLine();
+
+            io.print("Введите новое подробное описание:");
+            String newDescription = io.readLine();
+
+            existingTask.setSummary(newSummary);
+            existingTask.setDescription(newDescription);
+
+            taskManager.updateTask(taskId, existingTask);
+            io.print("Задача успешно обновлена.");
+        } else {
+            io.print("Задача с ID " + taskId + "не найдена.");
         }
     }
 }
